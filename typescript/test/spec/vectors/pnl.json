@@ -1,0 +1,802 @@
+{
+  "$comment": "Exchange 정산 공식(math.md). input.contractSet 2 가 현행, 1 은 업그레이드 전 실거래 재현용(curve=null). expected 는 상대오차 1e-9. observed 는 실거래 값으로, 소수 셋째 자리 반올림 값은 절대오차 5e-4, 원본 raw 값은 상대오차 1e-9",
+  "tolerance": {
+    "expected": 1e-09,
+    "observedRounded": 0.0005,
+    "observedRaw": 1e-09
+  },
+  "cases": [
+    {
+      "name": "set1_btc_short_win_small",
+      "input": {
+        "instrumentId": 0,
+        "isLong": false,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 82782.5,
+        "exitPrice": 82749.5,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 1,
+        "curve": null
+      },
+      "expected": {
+        "rawPnl": 0.3986349771992873,
+        "priceMove": 0.0003986349771992873,
+        "holdback": 0.0,
+        "move": 0.0003793072207289485,
+        "scale": 0.6002394853165494,
+        "adjustedPnl": 0.22767517094719483,
+        "winFee": 0.0045535034189438965,
+        "builderFee": 0.0,
+        "netPnl": 0.22312166752825094,
+        "liquidated": false
+      },
+      "observed": {
+        "adjustedPnl": 0.228,
+        "winFee": 0.0046,
+        "source": "실거래 2026-10-21 (contract set 1), close 응답의 adjustedPnl/userPaidFee (소수 셋째·넷째 자리 반올림)"
+      }
+    },
+    {
+      "name": "set1_btc_long_win_small",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 83773.5,
+        "exitPrice": 83799.5,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 1,
+        "curve": null
+      },
+      "expected": {
+        "rawPnl": 0.31036067491509844,
+        "priceMove": 0.00031036067491509845,
+        "holdback": 0.0,
+        "move": 0.0002912615564587152,
+        "scale": 0.5453335904557084,
+        "adjustedPnl": 0.15883471034534918,
+        "winFee": 0.0031766942069069836,
+        "builderFee": 0.0,
+        "netPnl": 0.1556580161384422,
+        "liquidated": false
+      },
+      "observed": {
+        "netPnl": 0.1556580161384938,
+        "source": "실거래 2026-10-21 (contract set 1), SSE closedPositions.netPnlRaw (fixtures/sse_open_close.json 과 같은 거래)"
+      }
+    },
+    {
+      "name": "set1_btc_long_move_10bps",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 100,
+        "leverage": 10,
+        "entryPrice": 80000.0,
+        "exitPrice": 80080.0,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 1,
+        "curve": null
+      },
+      "expected": {
+        "rawPnl": 1.0,
+        "priceMove": 0.001,
+        "holdback": 0.0,
+        "move": 0.0009799999999999273,
+        "scale": 0.754215781013617,
+        "adjustedPnl": 0.7391314653932899,
+        "winFee": 0.014782629307865797,
+        "builderFee": 0.0,
+        "netPnl": 0.7243488360854241,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_short_win_small",
+      "input": {
+        "instrumentId": 0,
+        "isLong": false,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 82782.5,
+        "exitPrice": 82749.5,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 0.3986349771992873,
+        "priceMove": 0.0003986349771992873,
+        "holdback": 0.00010557023868769952,
+        "move": 0.000273736982041249,
+        "scale": 0.531914189480776,
+        "adjustedPnl": 0.14560458493338468,
+        "winFee": 0.002912091698667694,
+        "builderFee": 0.0,
+        "netPnl": 0.142692493234717,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_win_small",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 83773.5,
+        "exitPrice": 83799.5,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 0.31036067491509844,
+        "priceMove": 0.00031036067491509845,
+        "holdback": 0.00011551686197974184,
+        "move": 0.00017574469447897338,
+        "scale": 0.43313980421736287,
+        "adjustedPnl": 0.07612202255886279,
+        "winFee": 0.0015224404511772558,
+        "builderFee": 0.0,
+        "netPnl": 0.07459958210768552,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_short_win_small_offhours",
+      "input": {
+        "instrumentId": 0,
+        "isLong": false,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 82782.5,
+        "exitPrice": 82749.5,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "offHours"
+      },
+      "expected": {
+        "rawPnl": 0.3986349771992873,
+        "priceMove": 0.0003986349771992873,
+        "holdback": 0.00020313334466571622,
+        "move": 0.0001761738760632323,
+        "scale": 0.4336878554618156,
+        "adjustedPnl": 0.07640447049825891,
+        "winFee": 0.0015280894099651782,
+        "builderFee": 0.0,
+        "netPnl": 0.07487638108829373,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_move_1pct",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 100,
+        "leverage": 10,
+        "entryPrice": 80000.0,
+        "exitPrice": 80800.0,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 10.0,
+        "priceMove": 0.01,
+        "holdback": 0.0,
+        "move": 0.009979999999999926,
+        "scale": 0.883235638462747,
+        "adjustedPnl": 8.81469167185815,
+        "winFee": 0.17629383343716298,
+        "builderFee": 0.0,
+        "netPnl": 8.638397838420987,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_move_10bps",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 100,
+        "leverage": 10,
+        "entryPrice": 80000.0,
+        "exitPrice": 80080.0,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 1.0,
+        "priceMove": 0.001,
+        "holdback": 0.0,
+        "move": 0.0009799999999999273,
+        "scale": 0.754215781013617,
+        "adjustedPnl": 0.7391314653932899,
+        "winFee": 0.014782629307865797,
+        "builderFee": 0.0,
+        "netPnl": 0.7243488360854241,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_move_10bps_offhours",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 100,
+        "leverage": 10,
+        "entryPrice": 80000.0,
+        "exitPrice": 80080.0,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "offHours"
+      },
+      "expected": {
+        "rawPnl": 1.0,
+        "priceMove": 0.001,
+        "holdback": 0.0,
+        "move": 0.0009799999999999273,
+        "scale": 0.754215781013617,
+        "adjustedPnl": 0.7391314653932899,
+        "winFee": 0.014782629307865797,
+        "builderFee": 0.0,
+        "netPnl": 0.7243488360854241,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_3_4bps_standard_peak",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 80027.0,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 0.3375,
+        "priceMove": 0.0003375,
+        "holdback": 0.00011802656249999999,
+        "move": 0.00019947343749992722,
+        "scale": 0.46162528740179515,
+        "adjustedPnl": 0.09208198291492792,
+        "winFee": 0.0018416396582985584,
+        "builderFee": 0.0,
+        "netPnl": 0.09024034325662936,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_4_2bps_offhours_peak",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 80033.6,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "offHours"
+      },
+      "expected": {
+        "rawPnl": 0.42000000000007276,
+        "priceMove": 0.00042000000000007277,
+        "holdback": 0.0002039796490519328,
+        "move": 0.00019602035094806722,
+        "scale": 0.45769803930039754,
+        "adjustedPnl": 0.08971813029190619,
+        "winFee": 0.0017943626058381237,
+        "builderFee": 0.0,
+        "netPnl": 0.08792376768606806,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_band_start_standard",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 80006.0,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 0.075,
+        "priceMove": 7.5e-05,
+        "holdback": 0.0,
+        "move": 5.499999999992724e-05,
+        "scale": 0.20251477968701528,
+        "adjustedPnl": 0.011138312882771105,
+        "winFee": 0.00022276625765542212,
+        "builderFee": 0.0,
+        "netPnl": 0.010915546625115683,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_band_end_standard",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 80048.0,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 0.6,
+        "priceMove": 0.0006,
+        "holdback": 0.0,
+        "move": 0.0005799999999999273,
+        "scale": 0.6784272818396265,
+        "adjustedPnl": 0.393487823466934,
+        "winFee": 0.007869756469338681,
+        "builderFee": 0.0,
+        "netPnl": 0.3856180669975953,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_short_inside_deadband",
+      "input": {
+        "instrumentId": 0,
+        "isLong": false,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 79999.0,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 0.0125,
+        "priceMove": 1.25e-05,
+        "holdback": 0.0,
+        "move": -7.5000000000727595e-06,
+        "scale": 0.0,
+        "adjustedPnl": 0.0,
+        "winFee": 0.0,
+        "builderFee": 0.0,
+        "netPnl": 0.0,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_loss",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 79900.0,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": -1.25,
+        "priceMove": null,
+        "holdback": 0.0,
+        "move": null,
+        "scale": null,
+        "adjustedPnl": -1.25,
+        "winFee": 0.0,
+        "builderFee": 0.0,
+        "netPnl": -1.25,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "eth_short_move_50bps",
+      "input": {
+        "instrumentId": 1,
+        "isLong": false,
+        "margin": 50,
+        "leverage": 20,
+        "entryPrice": 3000.0,
+        "exitPrice": 2985.0,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 5.0,
+        "priceMove": 0.005,
+        "holdback": 0.0,
+        "move": 0.004980000000000018,
+        "scale": 0.8531800809247971,
+        "adjustedPnl": 4.2488368030055055,
+        "winFee": 0.08497673606011011,
+        "builderFee": 0.0,
+        "netPnl": 4.163860066945396,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "eth_long_1000x_tiny",
+      "input": {
+        "instrumentId": 1,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 1000,
+        "entryPrice": 3000.0,
+        "exitPrice": 3000.3,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 1.0000000000006064,
+        "priceMove": 0.00010000000000006064,
+        "holdback": 3.884029802415051e-06,
+        "move": 7.611597019766377e-05,
+        "scale": 0.19606110836205398,
+        "adjustedPnl": 0.14923381481007028,
+        "winFee": 0.0029846762962014058,
+        "builderFee": 0.0,
+        "netPnl": 0.14624913851386886,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "eth_long_1000x_tiny_offhours",
+      "input": {
+        "instrumentId": 1,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 1000,
+        "entryPrice": 3000.0,
+        "exitPrice": 3000.3,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "offHours"
+      },
+      "expected": {
+        "rawPnl": 1.0000000000006064,
+        "priceMove": 0.00010000000000006064,
+        "holdback": 2.4552586731200573e-05,
+        "move": 5.544741326887825e-05,
+        "scale": 0.1518023038832055,
+        "adjustedPnl": 0.08417045078579938,
+        "winFee": 0.0016834090157159876,
+        "builderFee": 0.0,
+        "netPnl": 0.0824870417700834,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_flat",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 80000.0,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 0.0,
+        "priceMove": null,
+        "holdback": 0.0,
+        "move": null,
+        "scale": null,
+        "adjustedPnl": 0.0,
+        "winFee": 0.0,
+        "builderFee": 0.0,
+        "netPnl": 0.0,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_at_deadband",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 80001.6,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 0.020000000000072758,
+        "priceMove": 2.000000000007276e-05,
+        "holdback": 0.0,
+        "move": 0.0,
+        "scale": 0.0,
+        "adjustedPnl": 0.0,
+        "winFee": 0.0,
+        "builderFee": 0.0,
+        "netPnl": 0.0,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_above_deadband",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 80001.7,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 0.02124999999996362,
+        "priceMove": 2.124999999996362e-05,
+        "holdback": 0.0,
+        "move": 1.2499999998908605e-06,
+        "scale": 0.005900042124661682,
+        "adjustedPnl": 7.375052655183176e-06,
+        "winFee": 1.4750105310366352e-07,
+        "builderFee": 0.0,
+        "netPnl": 7.227551602079512e-06,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_above_deadband_offhours",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 80002.6,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "offHours"
+      },
+      "expected": {
+        "rawPnl": 0.03250000000007276,
+        "priceMove": 3.250000000007276e-05,
+        "holdback": 3.89051042998199e-08,
+        "move": 1.2461094895700181e-05,
+        "scale": 0.055550612685819505,
+        "adjustedPnl": 0.0006922214561922832,
+        "winFee": 1.3844429123845665e-05,
+        "builderFee": 0.0,
+        "netPnl": 0.0006783770270684375,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_short_at_deadband",
+      "input": {
+        "instrumentId": 0,
+        "isLong": false,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 79998.4,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 0.020000000000072758,
+        "priceMove": 2.000000000007276e-05,
+        "holdback": 0.0,
+        "move": 0.0,
+        "scale": 0.0,
+        "adjustedPnl": 0.0,
+        "winFee": 0.0,
+        "builderFee": 0.0,
+        "netPnl": 0.0,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_short_loss",
+      "input": {
+        "instrumentId": 0,
+        "isLong": false,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 80100.0,
+        "builder": false,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": -1.25,
+        "priceMove": null,
+        "holdback": 0.0,
+        "move": null,
+        "scale": null,
+        "adjustedPnl": -1.25,
+        "winFee": 0.0,
+        "builderFee": 0.0,
+        "netPnl": -1.25,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_move_1pct_builder",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 100,
+        "leverage": 10,
+        "entryPrice": 80000.0,
+        "exitPrice": 80800.0,
+        "builder": true,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": 10.0,
+        "priceMove": 0.01,
+        "holdback": 0.0,
+        "move": 0.009979999999999926,
+        "scale": 0.883235638462747,
+        "adjustedPnl": 8.81469167185815,
+        "winFee": 0.17629383343716298,
+        "builderFee": 0.044073458359290746,
+        "netPnl": 8.594324380061696,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_loss_builder",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 79900.0,
+        "builder": true,
+        "bustPrice": null,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": -1.25,
+        "priceMove": null,
+        "holdback": 0.0,
+        "move": null,
+        "scale": null,
+        "adjustedPnl": -1.25,
+        "winFee": 0.0,
+        "builderFee": 0.0,
+        "netPnl": -1.25,
+        "liquidated": false
+      }
+    },
+    {
+      "name": "btc_long_close_past_bust",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 79230.0,
+        "builder": true,
+        "bustPrice": 79240.0,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": -9.625,
+        "priceMove": null,
+        "holdback": 0.0,
+        "move": null,
+        "scale": null,
+        "adjustedPnl": -10,
+        "winFee": 0.0,
+        "builderFee": 0.0,
+        "netPnl": -10,
+        "liquidated": true
+      }
+    },
+    {
+      "name": "btc_short_close_at_bust",
+      "input": {
+        "instrumentId": 0,
+        "isLong": false,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 80760.0,
+        "builder": false,
+        "bustPrice": 80760.0,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": -9.5,
+        "priceMove": null,
+        "holdback": 0.0,
+        "move": null,
+        "scale": null,
+        "adjustedPnl": -10,
+        "winFee": 0.0,
+        "builderFee": 0.0,
+        "netPnl": -10,
+        "liquidated": true
+      }
+    },
+    {
+      "name": "btc_long_close_before_bust",
+      "input": {
+        "instrumentId": 0,
+        "isLong": true,
+        "margin": 10,
+        "leverage": 100,
+        "entryPrice": 80000.0,
+        "exitPrice": 79250.0,
+        "builder": false,
+        "bustPrice": 79240.0,
+        "contractSet": 2,
+        "curve": "standard"
+      },
+      "expected": {
+        "rawPnl": -9.375,
+        "priceMove": null,
+        "holdback": 0.0,
+        "move": null,
+        "scale": null,
+        "adjustedPnl": -9.375,
+        "winFee": 0.0,
+        "builderFee": 0.0,
+        "netPnl": -9.375,
+        "liquidated": false
+      }
+    }
+  ]
+}

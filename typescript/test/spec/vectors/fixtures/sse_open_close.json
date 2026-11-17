@@ -1,0 +1,262 @@
+{
+ "$comment": "\uc2e4\uc81c SSE wallet \uc774\ubca4\ud2b8 (2026-10-21 13:19\u201313:42 UTC, BTC long 100x $10 open\u2192close \ud55c \uc0ac\uc774\ud074). \uc9c0\uac11\u00b7\uc138\uc158\ud0a4\u00b7positionId\u00b7intentId \ub294 \uac00\uba85 \ucc98\ub9ac. events[0]=\ucd5c\ucd08 \uc2a4\ub0c5\uc0f7, [1..4]=delta, reconnectSnapshot=\uc7ac\uc5f0\uacb0 \uc2dc \ubc1b\uc740 \uc804\uccb4 \uc2a4\ub0c5\uc0f7",
+ "events": [
+  {
+   "address": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+   "indexedThroughBlock": 49137622,
+   "indexedThroughTimestamp": 1792588760,
+   "sessionKeys": [
+    [
+     "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
+     "1795157452"
+    ],
+    [
+     "0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc",
+     "1795153555"
+    ]
+   ],
+   "walletRevision": 49128729,
+   "queueRevision": "16",
+   "balance": "15512658625856729273",
+   "queued": "0",
+   "locked": "0",
+   "funds": {
+    "reservedBalance": "0",
+    "reservedQueued": "0",
+    "availableBalance": "15512658625856729273",
+    "availableQueued": "0"
+   },
+   "queueNodeCount": 0,
+   "consumableDebt": "0",
+   "paper": {
+    "balance": "0",
+    "staked": "0",
+    "pendingBase": "0",
+    "rewardDebt": "0"
+   },
+   "lifetime": {
+    "depositedRaw": "13755434000000000000",
+    "withdrawnRaw": "0",
+    "realizedPnlRaw": "1757224625856729273",
+    "feesPaidRaw": "35861727058300596",
+    "tradedNotionalRaw": "3000000000000000000000",
+    "paperRewardsClaimedRaw": "0"
+   },
+   "openPositions": [],
+   "operations": [],
+   "accountRevision": 1
+  },
+  {
+   "address": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+   "accountRevision": 2,
+   "baseAccountRevision": 1,
+   "state": {
+    "indexedThroughBlock": 49137624,
+    "indexedThroughTimestamp": 1792588762,
+    "queueRevision": "17",
+    "funds": {
+     "reservedBalance": "10000000000000000000",
+     "reservedQueued": "0",
+     "availableBalance": "5512658625856729273",
+     "availableQueued": "0"
+    }
+   },
+   "addedPositions": [],
+   "removedPositionIds": [],
+   "addedOperations": [
+    [
+     "0xa38fe45fc58bc22e897da3da1a28d77c12c81a96cd70e7554b9f37c5e8965c04",
+     "openPosition",
+     0,
+     true,
+     false,
+     "10000000000000000000",
+     100,
+     1792588763168,
+     "1792592363",
+     null
+    ]
+   ],
+   "removedOperationIds": []
+  },
+  {
+   "address": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+   "accountRevision": 3,
+   "baseAccountRevision": 2,
+   "state": {
+    "indexedThroughBlock": 49137628,
+    "indexedThroughTimestamp": 1792588766,
+    "walletRevision": 49137628,
+    "queueRevision": "18",
+    "balance": "5512658625856729273",
+    "locked": "10000000000000000000",
+    "funds": {
+     "reservedBalance": "0",
+     "reservedQueued": "0",
+     "availableBalance": "5512658625856729273",
+     "availableQueued": "0"
+    }
+   },
+   "lifetime": {
+    "depositedRaw": "13755434000000000000",
+    "withdrawnRaw": "0",
+    "realizedPnlRaw": "1757224625856729273",
+    "feesPaidRaw": "35861727058300596",
+    "tradedNotionalRaw": "4000000000000000000000",
+    "paperRewardsClaimedRaw": "0"
+   },
+   "addedPositions": [
+    [
+     "1000001",
+     0,
+     true,
+     false,
+     "837735",
+     "10000000000000000000",
+     100,
+     "829752",
+     1792588766000,
+     "0xa38fe45fc58bc22e897da3da1a28d77c12c81a96cd70e7554b9f37c5e8965c04"
+    ]
+   ],
+   "removedPositionIds": [],
+   "addedOperations": [],
+   "removedOperationIds": [
+    "0xa38fe45fc58bc22e897da3da1a28d77c12c81a96cd70e7554b9f37c5e8965c04"
+   ],
+   "intentOutcomes": [
+    [
+     "0xa38fe45fc58bc22e897da3da1a28d77c12c81a96cd70e7554b9f37c5e8965c04",
+     "succeeded"
+    ]
+   ]
+  },
+  {
+   "address": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+   "accountRevision": 4,
+   "baseAccountRevision": 3,
+   "state": {
+    "indexedThroughBlock": 49137659,
+    "indexedThroughTimestamp": 1792588797,
+    "queueRevision": "19"
+   },
+   "addedPositions": [],
+   "removedPositionIds": [],
+   "addedOperations": [
+    [
+     "0x517b0a19e9b0b0379f4949ba535d5608d107533a11a04221ad304ca8b399b24b",
+     "closePositions",
+     null,
+     null,
+     null,
+     null,
+     null,
+     1792588797872,
+     "1792592397",
+     [
+      "1000001"
+     ]
+    ]
+   ],
+   "removedOperationIds": []
+  },
+  {
+   "address": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+   "accountRevision": 5,
+   "baseAccountRevision": 4,
+   "state": {
+    "indexedThroughBlock": 49137668,
+    "indexedThroughTimestamp": 1792588805,
+    "walletRevision": 49137668,
+    "queueRevision": "20",
+    "balance": "15668316641995223080",
+    "locked": "0",
+    "funds": {
+     "reservedBalance": "0",
+     "reservedQueued": "0",
+     "availableBalance": "15668316641995223080",
+     "availableQueued": "0"
+    }
+   },
+   "lifetime": {
+    "depositedRaw": "13755434000000000000",
+    "withdrawnRaw": "0",
+    "realizedPnlRaw": "1912882641995223080",
+    "feesPaidRaw": "39038421265208632",
+    "tradedNotionalRaw": "4000000000000000000000",
+    "paperRewardsClaimedRaw": "0"
+   },
+   "addedPositions": [],
+   "removedPositionIds": [
+    "1000001"
+   ],
+   "closedPositions": [
+    [
+     "1000001",
+     0,
+     true,
+     "10000000000000000000",
+     100,
+     false,
+     "155658016138493807",
+     "0"
+    ]
+   ],
+   "addedOperations": [],
+   "removedOperationIds": [
+    "0x517b0a19e9b0b0379f4949ba535d5608d107533a11a04221ad304ca8b399b24b"
+   ],
+   "intentOutcomes": [
+    [
+     "0x517b0a19e9b0b0379f4949ba535d5608d107533a11a04221ad304ca8b399b24b",
+     "succeeded"
+    ]
+   ]
+  }
+ ],
+ "reconnectSnapshot": {
+  "address": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+  "indexedThroughBlock": 49139014,
+  "indexedThroughTimestamp": 1792590129,
+  "sessionKeys": [
+   [
+    "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
+    "1795157452"
+   ],
+   [
+    "0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc",
+    "1795153555"
+   ]
+  ],
+  "walletRevision": 49137668,
+  "queueRevision": "20",
+  "balance": "15668316641995223080",
+  "queued": "0",
+  "locked": "0",
+  "funds": {
+   "reservedBalance": "0",
+   "reservedQueued": "0",
+   "availableBalance": "15668316641995223080",
+   "availableQueued": "0"
+  },
+  "queueNodeCount": 0,
+  "consumableDebt": "0",
+  "paper": {
+   "balance": "0",
+   "staked": "0",
+   "pendingBase": "0",
+   "rewardDebt": "0"
+  },
+  "lifetime": {
+   "depositedRaw": "13755434000000000000",
+   "withdrawnRaw": "0",
+   "realizedPnlRaw": "1912882641995223080",
+   "feesPaidRaw": "39038421265208632",
+   "tradedNotionalRaw": "4000000000000000000000",
+   "paperRewardsClaimedRaw": "0"
+  },
+  "openPositions": [],
+  "operations": [],
+  "accountRevision": 1
+ }
+}

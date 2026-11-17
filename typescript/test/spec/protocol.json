@@ -1,0 +1,407 @@
+{
+  "$comment": "Papertrade 비공식 프로토콜 스펙. 각 항목의 status: verified(실거래·온체인으로 확인) | observed(프론트 번들/API 응답에서 읽음, 실거래 미검증) | inferred(추정)",
+  "specVersion": "0.3.0",
+  "observedAt": "2026-10-26",
+  "observedBuild": "38cca5f93d1d",
+  "network": {
+    "chainId": 999,
+    "chainName": "HyperEVM Mainnet",
+    "rpcUrl": "https://rpc.hyperliquid.xyz/evm",
+    "hyperliquidInfoApi": "https://api.hyperliquid.xyz/info",
+    "hyperliquidWs": "wss://api.hyperliquid.xyz/ws",
+    "status": "verified"
+  },
+  "hosts": {
+    "api": "https://exchange.papertrade.xyz",
+    "stream": "wss://stream.papertrade.xyz/connection/websocket",
+    "status": "verified"
+  },
+  "contracts": {
+    "exchange": "0x6cd5661646289FB6E65EA5C032310fDEd797D0a2",
+    "batchExecutor": "0x233Ff29b239abc1D7748605dA9b205C3e008626E",
+    "sessionKeyManager": "0x8326Eb8896e358717f10502Ec73CE8D28E37B108",
+    "builderRegistry": "0xFdc6550436Dd75Ce8a0B145f935B7D3A64F53248",
+    "priceOracle": "0xa9B4c7b7Ca5835652d81E25739c870D49F39cC2e",
+    "depositProxyFactory": "0x1629b7D46bef6E13FF754174FC9F32dEa309b38F",
+    "paperToken": "0xe40f17915DAa230324030003A197cdAEf2261C0e",
+    "paperStaking": "0xAAd6c7b0CC3014FC80FfEDAe0Ed7Ce5967b0F016",
+    "paperTokenomics": "0x75174549dbBD44497D31a47E2E2D7406408d63D9",
+    "collateral": {
+      "address": "0x6b9e773128f453f5c2c60935ee2de2cbc5390a24",
+      "evmDecimals": 6,
+      "internalDecimals": 18
+    },
+    "bboPrecompile": "0x000000000000000000000000000000000000080e",
+    "governance": {
+      "timelock": "0xB915Fa41e824D6aA31BB833Ee81220C0F2c8EA0F",
+      "multisig": "0x696292762fD5AC3677a45EdBe54EAECE4194d1F6",
+      "proxyAdmin": "0xe79c91cc682f1bb401a9cab74c900470190f0f8f",
+      "timelockDelaySeconds": 86400,
+      "$comment": "timelock/multisig/24시간은 docs(contract set 2). proxyAdmin 은 번들 deployment 청크 값(observed). Multisig 는 2-of-3이며 BuilderRegistry guardian 으로 빌더를 즉시 제거할 수 있다."
+    },
+    "status": "observed",
+    "$comment": "주소는 docs.papertrade.xyz/dev/contract-addresses 와 번들 deployment 청크에서 확인. BuilderRegistry 는 프록시가 아니다. collateral 은 번들 값이며 문서의 USDC(0xb883…630f)와 다르다."
+  },
+  "build": {
+    "header": "X-Papertrade-Build",
+    "discovery": "GET {api}/ → index.html 에서 /assets/build-*.js 경로 추출 → 그 파일의 첫 템플릿 리터럴(`var e=`...``) 값",
+    "status": "verified",
+    "$comment": "서버가 강제하는지는 미확인. 배포마다 바뀌므로 하드코딩 금지."
+  },
+  "domains": {
+    "exchange": {
+      "name": "String",
+      "version": "1",
+      "chainId": 999,
+      "verifyingContract": "0x6cd5661646289FB6E65EA5C032310fDEd797D0a2",
+      "status": "verified",
+      "$comment": "name 이 문자 그대로 \"String\". SessionKeyManager.DOMAIN_SEPARATOR() 와 일치 확인"
+    },
+    "paperStaking": {
+      "name": "PaperStaking",
+      "version": "1",
+      "chainId": 999,
+      "verifyingContract": "0xAAd6c7b0CC3014FC80FfEDAe0Ed7Ce5967b0F016",
+      "status": "observed"
+    },
+    "cancellation": {
+      "name": "PaperTrade Intent Cancel",
+      "version": "2",
+      "chainId": 999,
+      "verifyingContract": "0x6cd5661646289FB6E65EA5C032310fDEd797D0a2",
+      "status": "observed"
+    }
+  },
+  "types": {
+    "RegisterSessionKey": [
+      [
+        "user",
+        "address"
+      ],
+      [
+        "key",
+        "address"
+      ],
+      [
+        "expiry",
+        "uint64"
+      ],
+      [
+        "feeAddress",
+        "address"
+      ],
+      [
+        "nonce",
+        "uint256"
+      ],
+      [
+        "deadline",
+        "uint64"
+      ]
+    ],
+    "OpenPosition": [
+      [
+        "user",
+        "address"
+      ],
+      [
+        "instrumentId",
+        "uint32"
+      ],
+      [
+        "isLong",
+        "bool"
+      ],
+      [
+        "size",
+        "uint128"
+      ],
+      [
+        "leverage",
+        "uint32"
+      ],
+      [
+        "useDebt",
+        "bool"
+      ],
+      [
+        "nonce",
+        "uint256"
+      ],
+      [
+        "deadline",
+        "uint64"
+      ]
+    ],
+    "Close": [
+      [
+        "user",
+        "address"
+      ],
+      [
+        "positionIds",
+        "uint256[]"
+      ],
+      [
+        "nonce",
+        "uint256"
+      ],
+      [
+        "deadline",
+        "uint64"
+      ]
+    ],
+    "WithdrawToCore": [
+      [
+        "user",
+        "address"
+      ],
+      [
+        "amount",
+        "uint256"
+      ],
+      [
+        "nonce",
+        "uint256"
+      ],
+      [
+        "deadline",
+        "uint64"
+      ]
+    ],
+    "Stake": [
+      [
+        "user",
+        "address"
+      ],
+      [
+        "amount",
+        "uint256"
+      ],
+      [
+        "nonce",
+        "uint256"
+      ],
+      [
+        "deadline",
+        "uint64"
+      ]
+    ],
+    "Unstake": [
+      [
+        "user",
+        "address"
+      ],
+      [
+        "amount",
+        "uint256"
+      ],
+      [
+        "nonce",
+        "uint256"
+      ],
+      [
+        "deadline",
+        "uint64"
+      ]
+    ],
+    "Claim": [
+      [
+        "user",
+        "address"
+      ],
+      [
+        "nonce",
+        "uint256"
+      ],
+      [
+        "deadline",
+        "uint64"
+      ]
+    ],
+    "Distribute": [
+      [
+        "user",
+        "address"
+      ],
+      [
+        "nonce",
+        "uint256"
+      ],
+      [
+        "deadline",
+        "uint64"
+      ]
+    ],
+    "CancelIntent": [
+      [
+        "user",
+        "address"
+      ],
+      [
+        "intentId",
+        "bytes32"
+      ],
+      [
+        "deadline",
+        "uint256"
+      ]
+    ]
+  },
+  "actions": {
+    "$comment": "POST /intents 의 action 값 → 서명할 primaryType, 도메인, 서명 주체",
+    "registerSessionKey": {
+      "primaryType": "RegisterSessionKey",
+      "domain": "exchange",
+      "signer": "master",
+      "status": "verified"
+    },
+    "openPosition": {
+      "primaryType": "OpenPosition",
+      "domain": "exchange",
+      "signer": "sessionKey",
+      "status": "verified"
+    },
+    "closePositions": {
+      "primaryType": "Close",
+      "domain": "exchange",
+      "signer": "sessionKey",
+      "status": "verified"
+    },
+    "withdrawToCore": {
+      "primaryType": "WithdrawToCore",
+      "domain": "exchange",
+      "signer": "master",
+      "status": "inferred"
+    },
+    "paperStake": {
+      "primaryType": "Stake",
+      "domain": "paperStaking",
+      "signer": "master",
+      "status": "inferred"
+    },
+    "paperUnstake": {
+      "primaryType": "Unstake",
+      "domain": "paperStaking",
+      "signer": "master",
+      "status": "inferred"
+    },
+    "paperClaim": {
+      "primaryType": "Claim",
+      "domain": "paperStaking",
+      "signer": "master",
+      "status": "inferred"
+    },
+    "cancel": {
+      "primaryType": "CancelIntent",
+      "domain": "cancellation",
+      "signer": "sessionKey",
+      "endpoint": "POST /intents/{intentId}/cancel",
+      "status": "inferred"
+    }
+  },
+  "serialization": {
+    "$comment": "POST body 의 signed 객체: 메시지 각 필드를 아래 규칙으로 문자열화한 뒤 v/r/s 를 합친다",
+    "uint*": "10진수 문자열",
+    "uint256[]": "10진수 문자열 배열",
+    "address": "소문자 0x hex",
+    "bytes*": "소문자 0x hex",
+    "bool": "JSON boolean 그대로",
+    "v": "10진수 문자열 (\"27\" | \"28\")",
+    "r": "0x + 32바이트 소문자 hex",
+    "s": "0x + 32바이트 소문자 hex",
+    "requestBody": "{ \"action\": <action>, \"signed\": { ...fields, v, r, s } }",
+    "status": "verified"
+  },
+  "intentId": {
+    "formula": "keccak256( keccak256(utf8(salt)) ‖ eip712Digest ‖ signerAddress(20 bytes) )",
+    "salt": "papertrade:intent-id:v2",
+    "eip712Digest": "keccak256(0x1901 ‖ domainSeparator ‖ structHash)",
+    "signer": "서명한 키의 주소 (open/close 는 세션키, user 필드가 아님)",
+    "status": "verified"
+  },
+  "nonce": {
+    "rule": "클라이언트가 생성. 사용한 값만 재사용 불가(순차 아님). 충돌 없는 uint256 이면 됨",
+    "frontendScheme": "randomUint24 * 256 에서 시작해 액션마다 +1 (localStorage papertrade.clientNonce.v1)",
+    "recommended": "CSPRNG로 uint256 생성. 진행 중 요청과 충돌하지 않는지 검사하고, 서명된 요청과 함께 영속 저장. 동일 요청 재전송에는 기존 nonce 유지",
+    "status": "verified",
+    "recommendationStatus": "sdk_policy",
+    "scope": "서버의 nonce 중복 검사 범위(user/signer/action/domain)는 미확정. SDK는 전체 로컬 요청에서 재사용하지 않는다."
+  },
+  "limits": {
+    "intentDeadlineSeconds": {
+      "value": 3600,
+      "status": "verified",
+      "$comment": "프론트 기본값 now+3600"
+    },
+    "sessionKeyExpirySeconds": {
+      "value": 2592000,
+      "status": "verified",
+      "$comment": "30일"
+    },
+    "closeMaxPositionIds": {
+      "value": 12,
+      "status": "observed"
+    },
+    "feeAddressDefault": {
+      "value": "0x0000000000000000000000000000000000000000",
+      "status": "verified",
+      "$comment": "feeAddress 는 빌더 코드다. 0 주소는 빌더 없음(papertrade.xyz 와 같음). 승인되지 않은 빌더 주소를 넣으면 등록이 거부된다(docs, contract set 2). 키가 close 할 때마다 해당 빌더에 builderFee 를 지급한다"
+    },
+    "minMarginUsd": {
+      "value": 10,
+      "status": "inferred"
+    },
+    "maxNotionalUsd": {
+      "value": 10000000,
+      "status": "observed"
+    },
+    "builderFeeRate": {
+      "value": 0.005,
+      "max": 0.01,
+      "status": "observed",
+      "$comment": "docs 값. 모든 빌더 동일 요율이며 timelock 으로 1% 까지 변경 가능. 현재 값은 BuilderRegistry 에서 읽어야 한다(getter 미확인)"
+    }
+  },
+  "contractSets": [
+    {
+      "set": 1,
+      "exchangeImplementation": "0x0F3feBFc94876b0C895F7aceCDc8F5c863b549EE",
+      "liveFrom": "2026-10-07",
+      "liveUntil": "2026-10-21T22:00:02Z",
+      "status": "verified",
+      "$comment": "최초 배포. vectors/pnl.json 의 observed 실거래 2건과 fixtures/sse_open_close.json 은 이 구현에서 체결됐다(2026-10-21 13:19Z)"
+    },
+    {
+      "set": 2,
+      "exchangeImplementation": "0x0A44049dBbb6b4762a6ba37aa0f7548c0B4A3723",
+      "liveFrom": "2026-10-21T22:00:02Z",
+      "upgradeTx": "0x4410b81e3eb76f83f5ddc4e3faee794fb67208d2f129bc013094b9d06055acb6",
+      "upgradeBlock": 49169385,
+      "changes": [
+        "수익 close 에 holdback 단계 추가. 표준/off-hours 두 payout curve 중 keeper 가 고른 것 적용 (math.md, instruments.json → settlement.payoutCurves)",
+        "close 가 bust 가격 이상으로 체결되면 hard liquidation 으로 정산 (마진 전액 손실, 빌더 수수료 없음)",
+        "빌더 코드: 세션키 feeAddress 가 승인된 빌더면 수익 close 시 이익의 0.5% 추가 차감. 승인되지 않은 주소는 등록 거부",
+        "Exchange.pushStakerFees() 는 PaperStaking 만 호출 가능",
+        "PAPER mint 규칙 변경 (supply 비례 + 지급불능 보너스 최대 5배). SDK 범위 밖",
+        "거버넌스: timelock 24시간, multisig 가 빌더 즉시 제거 가능"
+      ],
+      "params": {
+        "profitThresholdDivisor": "50000",
+        "profitCarveOut": {
+          "startPpm": "75",
+          "endPpm": "600",
+          "holdbackWad": "3597000000000000000"
+        },
+        "profitOffHours": {
+          "startPpm": "30",
+          "endPpm": "1000",
+          "holdbackWad": "6085000000000000000",
+          "cubicFall": true
+        }
+      },
+      "status": "observed",
+      "$comment": "적용 시각은 업그레이드 tx 블록 타임스탬프(verified). 곡선 식은 docs/how/asymmetric-impact 와 번들 파라미터가 일치하나 이 구현에서의 실거래 검증은 아직 없음. 현재 어느 곡선이 적용 중인지 읽는 getter 는 미확인"
+    }
+  ]
+}

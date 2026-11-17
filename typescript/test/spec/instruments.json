@@ -1,0 +1,27 @@
+{
+  "$comment": "가격 raw = price × priceScale. assetIndex 는 Hyperliquid 자산 인덱스(BBO 프리컴파일 입력). impact 파라미터는 docs.papertrade.xyz/how/asymmetric-impact 런칭값",
+  "status": "verified",
+  "instruments": [
+    {
+      "id": 0, "name": "BTC", "assetIndex": 0, "priceScale": 10,
+      "impact": { "baseRate": 0.10, "rateMultiplier": 15000, "referenceNotional": 100000, "positionMultiplier": 814.598 }
+    },
+    {
+      "id": 1, "name": "ETH", "assetIndex": 1, "priceScale": 100,
+      "impact": { "baseRate": 0.10, "rateMultiplier": 15000, "referenceNotional": 100000, "positionMultiplier": 483.979 }
+    }
+  ],
+  "settlement": {
+    "deadbandDivisor": 50000,
+    "deadbandRule": "thresholdRaw = floor(entryPriceRaw / deadbandDivisor), 가격 단위로는 thresholdRaw / priceScale. 실거래 2건과 1e-13 일치 (문서의 entryPrice/50000 은 근사)",
+    "winFee": 0.02,
+    "builderFee": { "value": 0.005, "status": "observed", "$comment": "승인된 빌더를 단 세션키의 수익 close 에만. 기준은 impact 후 이익(adjustedPnl). 손실·청산에는 트레이더 부담 없음. protocol.json → limits.builderFeeRate" },
+    "payoutCurves": {
+      "$comment": "contract set 2. 수익 close 의 holdback 구간. priceMove(deadband 전, 비율)가 start < priceMove < end 일 때 holdback = holdback × width × u² × (1−u)^fallPower, width = end − start, u = (priceMove − start)/width. 번들 profitCarveOut/profitOffHours 와 docs 값 일치",
+      "standard": { "startPpm": 75, "endPpm": 600, "holdback": 3.597, "fallPower": 2 },
+      "offHours": { "startPpm": 30, "endPpm": 1000, "holdback": 6.085, "fallPower": 3 },
+      "status": "observed"
+    },
+    "bustBufferBps": { "value": 4.8, "status": "inferred", "$comment": "포지션 2건 관측. docs(contract set 2)는 '약 5bps, 레버리지와 무관한 가격 고정 오프셋'. entry 기준인지 zero-equity 기준인지 미확정" }
+  }
+}

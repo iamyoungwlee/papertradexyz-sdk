@@ -1,0 +1,497 @@
+{
+  "$comment": "EIP-712 서명 벡터. 구현은 input 으로 expected 의 모든 값을 재현해야 한다. requestBody 는 키 순서 무관, 값 일치",
+  "keys": {
+    "master": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "sessionKey": "0x084C7E6788Bfb553BF77720e4b3b32f400FF8De6",
+    "source": "Hardhat 기본 테스트 계정 #0, #1"
+  },
+  "cases": [
+    {
+      "name": "register_session_key",
+      "note": "마스터 지갑이 서명",
+      "status": "verified",
+      "input": {
+        "action": "registerSessionKey",
+        "primaryType": "RegisterSessionKey",
+        "domain": "exchange",
+        "signerPrivateKey": "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
+        "message": {
+          "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+          "key": "0x084c7e6788bfb553bf77720e4b3b32f400ff8de6",
+          "expiry": "1795180763",
+          "feeAddress": "0x0000000000000000000000000000000000000000",
+          "nonce": "1792588763168042",
+          "deadline": "1792592363"
+        }
+      },
+      "expected": {
+        "signer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "domainSeparator": "0x53a2ab5a64b3239d36b108fb4cd035ebb40ed3f71dec28e37966622670147e77",
+        "structHash": "0xe9c3193e8bb31ee524a894a804c29914471ea6c4641a303a6a6168164e2fd419",
+        "digest": "0x45295549ec66416af636ebb99a9c60255e27f98eef8d761cf0293488af277c88",
+        "signature": {
+          "v": "28",
+          "r": "0xf9b2f7ba1cc84cc5fe6849672e84cae79ac9708e418c2351907fb1e1ab5e207f",
+          "s": "0x632d02b8b841120a829f43c0ef232fa3c82604dcab0a9972344ae02630918cd4"
+        },
+        "intentId": "0x4ad5ab2e6d16dadf9dfc067da0f74aadebe2790c98c16d250c51e94847134360",
+        "requestBody": {
+          "action": "registerSessionKey",
+          "signed": {
+            "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+            "key": "0x084c7e6788bfb553bf77720e4b3b32f400ff8de6",
+            "expiry": "1795180763",
+            "feeAddress": "0x0000000000000000000000000000000000000000",
+            "nonce": "1792588763168042",
+            "deadline": "1792592363",
+            "v": "28",
+            "r": "0xf9b2f7ba1cc84cc5fe6849672e84cae79ac9708e418c2351907fb1e1ab5e207f",
+            "s": "0x632d02b8b841120a829f43c0ef232fa3c82604dcab0a9972344ae02630918cd4"
+          }
+        }
+      }
+    },
+    {
+      "name": "open_btc_long_100x_10usd",
+      "note": "size 는 마진(18 decimals). user 는 마스터, 서명은 세션키",
+      "status": "verified",
+      "input": {
+        "action": "openPosition",
+        "primaryType": "OpenPosition",
+        "domain": "exchange",
+        "signerPrivateKey": "0x59c6995e998f97a5a0044966f0945389dc9e86da7f6a2da9a4b6e3fd34c1d0b4",
+        "message": {
+          "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+          "instrumentId": "0",
+          "isLong": true,
+          "size": "10000000000000000000",
+          "leverage": "100",
+          "useDebt": false,
+          "nonce": "1792588763168043",
+          "deadline": "1792592363"
+        }
+      },
+      "expected": {
+        "signer": "0x084C7E6788Bfb553BF77720e4b3b32f400FF8De6",
+        "domainSeparator": "0x53a2ab5a64b3239d36b108fb4cd035ebb40ed3f71dec28e37966622670147e77",
+        "structHash": "0xb78eb7f88664e28ccf0362fc26638c9ed62135607e134128348a0df3bdd3c896",
+        "digest": "0xc56f52c494af1aa3ac4fbfb8a2882322e50cb068705fc215769832b611bb7a42",
+        "signature": {
+          "v": "28",
+          "r": "0x79fe4c206e78bfa60e17e895558c2e16d1f3a71592420de39fd4c313169f5faa",
+          "s": "0x52dd78a8116d6ef1c61706f0da8d046e6bfca935aff24a50e267b19c196a36f7"
+        },
+        "intentId": "0xc049a145264b1f623901d117faaf1cbb11f7669771db02c2e4603fcaa8210ffe",
+        "requestBody": {
+          "action": "openPosition",
+          "signed": {
+            "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+            "instrumentId": "0",
+            "isLong": true,
+            "size": "10000000000000000000",
+            "leverage": "100",
+            "useDebt": false,
+            "nonce": "1792588763168043",
+            "deadline": "1792592363",
+            "v": "28",
+            "r": "0x79fe4c206e78bfa60e17e895558c2e16d1f3a71592420de39fd4c313169f5faa",
+            "s": "0x52dd78a8116d6ef1c61706f0da8d046e6bfca935aff24a50e267b19c196a36f7"
+          }
+        }
+      }
+    },
+    {
+      "name": "open_eth_short_1000x_useDebt",
+      "note": "",
+      "status": "verified",
+      "input": {
+        "action": "openPosition",
+        "primaryType": "OpenPosition",
+        "domain": "exchange",
+        "signerPrivateKey": "0x59c6995e998f97a5a0044966f0945389dc9e86da7f6a2da9a4b6e3fd34c1d0b4",
+        "message": {
+          "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+          "instrumentId": "1",
+          "isLong": false,
+          "size": "25000000000000000000",
+          "leverage": "1000",
+          "useDebt": true,
+          "nonce": "1792588763168044",
+          "deadline": "1792592363"
+        }
+      },
+      "expected": {
+        "signer": "0x084C7E6788Bfb553BF77720e4b3b32f400FF8De6",
+        "domainSeparator": "0x53a2ab5a64b3239d36b108fb4cd035ebb40ed3f71dec28e37966622670147e77",
+        "structHash": "0xe3089803ab84bd2789d9775b4dc5dc2e5ca101243f89b314d976b7bd257a4df6",
+        "digest": "0x872deaa101e9dababd4112c2e53b2c4f1b1ff048107d6787f71e9edf38f73225",
+        "signature": {
+          "v": "27",
+          "r": "0x8e8a5304a7624593a2d316cd512fb67b62337ff10745605e47d0069d823f780a",
+          "s": "0x056c959b58cbcc43a2fd95ba34042e12c39aea7aeef6126258d578f37481e8fc"
+        },
+        "intentId": "0x303b645c80bbf786bbb135fd6268a9d137ca35eb479000af12dcbab9851048f1",
+        "requestBody": {
+          "action": "openPosition",
+          "signed": {
+            "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+            "instrumentId": "1",
+            "isLong": false,
+            "size": "25000000000000000000",
+            "leverage": "1000",
+            "useDebt": true,
+            "nonce": "1792588763168044",
+            "deadline": "1792592363",
+            "v": "27",
+            "r": "0x8e8a5304a7624593a2d316cd512fb67b62337ff10745605e47d0069d823f780a",
+            "s": "0x056c959b58cbcc43a2fd95ba34042e12c39aea7aeef6126258d578f37481e8fc"
+          }
+        }
+      }
+    },
+    {
+      "name": "close_single",
+      "note": "",
+      "status": "verified",
+      "input": {
+        "action": "closePositions",
+        "primaryType": "Close",
+        "domain": "exchange",
+        "signerPrivateKey": "0x59c6995e998f97a5a0044966f0945389dc9e86da7f6a2da9a4b6e3fd34c1d0b4",
+        "message": {
+          "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+          "positionIds": [
+            "1000001"
+          ],
+          "nonce": "1792588763168045",
+          "deadline": "1792592363"
+        }
+      },
+      "expected": {
+        "signer": "0x084C7E6788Bfb553BF77720e4b3b32f400FF8De6",
+        "domainSeparator": "0x53a2ab5a64b3239d36b108fb4cd035ebb40ed3f71dec28e37966622670147e77",
+        "structHash": "0x51bd2887a8707dbf6560e2a6fbc549f3356c21401b75ecfd01960f0dc06ee67b",
+        "digest": "0x52012454bc5a75400c9f23d71789e80d97a0e2d1ff10706f6fb6fc0c265d4b64",
+        "signature": {
+          "v": "27",
+          "r": "0x9973934479d3ce71bcdc0dc17ea4b77ee26f9644ea1eee90f0bb3cd175533c1e",
+          "s": "0x4d0b56f37c72edf872cd4c07c0a5e325c866c37fadbc0245be11214c60c02882"
+        },
+        "intentId": "0x672194d523f3512bd03d2e80d71a50eb52a2bf5adeae3a30b73ddb0b5e2a1fa8",
+        "requestBody": {
+          "action": "closePositions",
+          "signed": {
+            "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+            "positionIds": [
+              "1000001"
+            ],
+            "nonce": "1792588763168045",
+            "deadline": "1792592363",
+            "v": "27",
+            "r": "0x9973934479d3ce71bcdc0dc17ea4b77ee26f9644ea1eee90f0bb3cd175533c1e",
+            "s": "0x4d0b56f37c72edf872cd4c07c0a5e325c866c37fadbc0245be11214c60c02882"
+          }
+        }
+      }
+    },
+    {
+      "name": "close_multi",
+      "note": "uint256[] 인코딩 확인용",
+      "status": "verified",
+      "input": {
+        "action": "closePositions",
+        "primaryType": "Close",
+        "domain": "exchange",
+        "signerPrivateKey": "0x59c6995e998f97a5a0044966f0945389dc9e86da7f6a2da9a4b6e3fd34c1d0b4",
+        "message": {
+          "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+          "positionIds": [
+            "1000001",
+            "1000002",
+            "1000003"
+          ],
+          "nonce": "1792588763168046",
+          "deadline": "1792592363"
+        }
+      },
+      "expected": {
+        "signer": "0x084C7E6788Bfb553BF77720e4b3b32f400FF8De6",
+        "domainSeparator": "0x53a2ab5a64b3239d36b108fb4cd035ebb40ed3f71dec28e37966622670147e77",
+        "structHash": "0x4a89e6af1a6e0a93ddb728dd5f1029ce411bffd0ba4dd36ff09191dfbf4bb3ae",
+        "digest": "0x42780a70d9d8d9c6528fef0ca9c01c4951361f7cc081f51883b98b6356a7eb24",
+        "signature": {
+          "v": "27",
+          "r": "0xa53e812b7c77842fff29e5610787cff2fe94c68305e75d084e982e42f09388ed",
+          "s": "0x7464a79ea6c799ac48736755d3d16647151fc247184015aea5b3eef10efc699d"
+        },
+        "intentId": "0x4a613f2dc64aa776f4c196be91cb19da0aa44e2de2db7d85ea539ae651ab1ee2",
+        "requestBody": {
+          "action": "closePositions",
+          "signed": {
+            "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+            "positionIds": [
+              "1000001",
+              "1000002",
+              "1000003"
+            ],
+            "nonce": "1792588763168046",
+            "deadline": "1792592363",
+            "v": "27",
+            "r": "0xa53e812b7c77842fff29e5610787cff2fe94c68305e75d084e982e42f09388ed",
+            "s": "0x7464a79ea6c799ac48736755d3d16647151fc247184015aea5b3eef10efc699d"
+          }
+        }
+      }
+    },
+    {
+      "name": "withdraw_to_core",
+      "note": "",
+      "status": "inferred",
+      "input": {
+        "action": "withdrawToCore",
+        "primaryType": "WithdrawToCore",
+        "domain": "exchange",
+        "signerPrivateKey": "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
+        "message": {
+          "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+          "amount": "5000000000000000000",
+          "nonce": "1792588763168047",
+          "deadline": "1792592363"
+        }
+      },
+      "expected": {
+        "signer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "domainSeparator": "0x53a2ab5a64b3239d36b108fb4cd035ebb40ed3f71dec28e37966622670147e77",
+        "structHash": "0x5bce040953960c87e3b788af269b68a67fb03e7ba6a52b2860f7b67bdacc49b0",
+        "digest": "0x04f282c8cba3e4b1d7c24e26e0109e9dc1be52a4f979388272fdec089cfc92db",
+        "signature": {
+          "v": "27",
+          "r": "0x1e5a6c53453706f675cba48c3ee145b994c84db334c2d72fe1651a44eb48db43",
+          "s": "0x06675e591d8f098923692d7ed285ce29c8590f7bb3216aa468dbc72c1e399248"
+        },
+        "intentId": "0x8cac4f5c020efe3decbb59137b6234585f3f6b9f86bce37b21c360f2f0a05126",
+        "requestBody": {
+          "action": "withdrawToCore",
+          "signed": {
+            "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+            "amount": "5000000000000000000",
+            "nonce": "1792588763168047",
+            "deadline": "1792592363",
+            "v": "27",
+            "r": "0x1e5a6c53453706f675cba48c3ee145b994c84db334c2d72fe1651a44eb48db43",
+            "s": "0x06675e591d8f098923692d7ed285ce29c8590f7bb3216aa468dbc72c1e399248"
+          }
+        }
+      }
+    },
+    {
+      "name": "paper_stake",
+      "note": "paperStaking 도메인",
+      "status": "inferred",
+      "input": {
+        "action": "paperStake",
+        "primaryType": "Stake",
+        "domain": "paperStaking",
+        "signerPrivateKey": "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
+        "message": {
+          "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+          "amount": "100000000000000000000",
+          "nonce": "1792588763168048",
+          "deadline": "1792592363"
+        }
+      },
+      "expected": {
+        "signer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "domainSeparator": "0x71706d56c8b436981e93987cd97df512528491b243c6d8d1614cad52659e7eb0",
+        "structHash": "0x884d67ed8a44ff43f69a14a1462f83afbd77de5aebf3a91fd49bbd84d20889c6",
+        "digest": "0xbff0b0bcb99a050d3e208daa400ecf1b685d94acdea5368ccf5c6498da98b78f",
+        "signature": {
+          "v": "27",
+          "r": "0x41bbdf7729fe6fdcd9306581166adc01d6ed1e201e71663f762ddc6d0e348710",
+          "s": "0x5e9c2ee362fd01bb7e8abff0fbd3f982d58f35695b899c3a8ce51807f9a2ac11"
+        },
+        "intentId": "0x7e1e64bfa335e2f85f91f907d183f40ec0f48b249b71f7e2fcf5daa82a979ac6",
+        "requestBody": {
+          "action": "paperStake",
+          "signed": {
+            "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+            "amount": "100000000000000000000",
+            "nonce": "1792588763168048",
+            "deadline": "1792592363",
+            "v": "27",
+            "r": "0x41bbdf7729fe6fdcd9306581166adc01d6ed1e201e71663f762ddc6d0e348710",
+            "s": "0x5e9c2ee362fd01bb7e8abff0fbd3f982d58f35695b899c3a8ce51807f9a2ac11"
+          }
+        }
+      }
+    },
+    {
+      "name": "paper_claim",
+      "note": "",
+      "status": "inferred",
+      "input": {
+        "action": "paperClaim",
+        "primaryType": "Claim",
+        "domain": "paperStaking",
+        "signerPrivateKey": "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
+        "message": {
+          "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+          "nonce": "1792588763168049",
+          "deadline": "1792592363"
+        }
+      },
+      "expected": {
+        "signer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "domainSeparator": "0x71706d56c8b436981e93987cd97df512528491b243c6d8d1614cad52659e7eb0",
+        "structHash": "0xd392b324796e91c5d5343d04858f9c1f80e3d744c468e32cdf0a22abc3570351",
+        "digest": "0xe6a5559474b87a11666c11e88ecf38ba057f8a1c6beeac4f90d391a2928d0dc7",
+        "signature": {
+          "v": "27",
+          "r": "0xc02f73efd59508b361c0e7c7c90cd3210faa4b185ef225366ffd33750ef56563",
+          "s": "0x0371f6315c75a01e497abbb1800201141bed5eea04b2d8e2b95e4e279779bbbb"
+        },
+        "intentId": "0x9fa65dd06cc1d8cf2f16ed1e5286c84f0ee24ba62d02ef17dfb5c47e19b11479",
+        "requestBody": {
+          "action": "paperClaim",
+          "signed": {
+            "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+            "nonce": "1792588763168049",
+            "deadline": "1792592363",
+            "v": "27",
+            "r": "0xc02f73efd59508b361c0e7c7c90cd3210faa4b185ef225366ffd33750ef56563",
+            "s": "0x0371f6315c75a01e497abbb1800201141bed5eea04b2d8e2b95e4e279779bbbb"
+          }
+        }
+      }
+    },
+    {
+      "name": "paper_unstake",
+      "note": "",
+      "status": "inferred",
+      "input": {
+        "action": "paperUnstake",
+        "primaryType": "Unstake",
+        "domain": "paperStaking",
+        "signerPrivateKey": "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
+        "message": {
+          "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+          "amount": "100000000000000000000",
+          "nonce": "1792588763168050",
+          "deadline": "1792592363"
+        }
+      },
+      "expected": {
+        "signer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        "domainSeparator": "0x71706d56c8b436981e93987cd97df512528491b243c6d8d1614cad52659e7eb0",
+        "structHash": "0x57ded3f49e6f46c7bf0b50c7553f4279e47c34bf06bd00643e12908f5cdd8791",
+        "digest": "0x239ce204f69d4e33de53577149470c270ea86c15cdf2cf0c222e36507e1af2b7",
+        "signature": {
+          "v": "28",
+          "r": "0xb209151ae4d637584de2937beca72a63c7b550c69d050055605df0f89775215d",
+          "s": "0x013f6dcedac4dbdacb1aca0311f996f18b809d14d224f439c406e85ddd849c61"
+        },
+        "intentId": "0x72219da3e270be3122b835898ec1b96356f789c4b52465cc9f19c104c55b0d4c",
+        "requestBody": {
+          "action": "paperUnstake",
+          "signed": {
+            "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+            "amount": "100000000000000000000",
+            "nonce": "1792588763168050",
+            "deadline": "1792592363",
+            "v": "28",
+            "r": "0xb209151ae4d637584de2937beca72a63c7b550c69d050055605df0f89775215d",
+            "s": "0x013f6dcedac4dbdacb1aca0311f996f18b809d14d224f439c406e85ddd849c61"
+          }
+        }
+      }
+    },
+    {
+      "name": "open_uint_boundaries",
+      "note": "인코딩 전용 경계값. 서버가 접수 가능한 주문이라는 의미가 아님",
+      "status": "verified",
+      "input": {
+        "action": "openPosition",
+        "primaryType": "OpenPosition",
+        "domain": "exchange",
+        "signerPrivateKey": "0x59c6995e998f97a5a0044966f0945389dc9e86da7f6a2da9a4b6e3fd34c1d0b4",
+        "message": {
+          "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+          "instrumentId": "4294967295",
+          "isLong": false,
+          "size": "340282366920938463463374607431768211455",
+          "leverage": "4294967295",
+          "useDebt": true,
+          "nonce": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "deadline": "18446744073709551615"
+        }
+      },
+      "expected": {
+        "signer": "0x084C7E6788Bfb553BF77720e4b3b32f400FF8De6",
+        "domainSeparator": "0x53a2ab5a64b3239d36b108fb4cd035ebb40ed3f71dec28e37966622670147e77",
+        "structHash": "0x22bc4be5cf4256d53e882226c76a232bc393c2537e6a3f77c3cadb99a53451a3",
+        "digest": "0xdb083aac569520a32cea6099e0aa8a4eb0786c64612e1a12dec9ac240c7167ae",
+        "signature": {
+          "v": "28",
+          "r": "0xf9b29fbc2036912e8ee19372ee116ce07db3ca55c8829031fc95087ed7109c42",
+          "s": "0x047ac01161db3c54fcc9c0fd8df1de1efc80a9ed0771c9e55dae021908459897"
+        },
+        "intentId": "0x3f21a90f8af69844ffca8193500028bb4a6df382bdf39b710aaa7680594d3db5",
+        "requestBody": {
+          "action": "openPosition",
+          "signed": {
+            "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+            "instrumentId": "4294967295",
+            "isLong": false,
+            "size": "340282366920938463463374607431768211455",
+            "leverage": "4294967295",
+            "useDebt": true,
+            "nonce": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+            "deadline": "18446744073709551615",
+            "v": "28",
+            "r": "0xf9b29fbc2036912e8ee19372ee116ce07db3ca55c8829031fc95087ed7109c42",
+            "s": "0x047ac01161db3c54fcc9c0fd8df1de1efc80a9ed0771c9e55dae021908459897"
+          }
+        }
+      }
+    },
+    {
+      "name": "cancel_intent",
+      "note": "cancellation 도메인(v2). deadline 이 uint256",
+      "status": "inferred",
+      "input": {
+        "action": "cancel",
+        "primaryType": "CancelIntent",
+        "domain": "cancellation",
+        "signerPrivateKey": "0x59c6995e998f97a5a0044966f0945389dc9e86da7f6a2da9a4b6e3fd34c1d0b4",
+        "message": {
+          "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+          "intentId": "0xabababababababababababababababababababababababababababababababab",
+          "deadline": "1792592363"
+        }
+      },
+      "expected": {
+        "signer": "0x084C7E6788Bfb553BF77720e4b3b32f400FF8De6",
+        "domainSeparator": "0xc7761a13592e2349d67f18eeed227ad588b105e36151d5e3a14c3181b0ef95be",
+        "structHash": "0xb163b7f3ff8b03361b6e03b98f96b192246eb07c0d26dc7b13875bdfb1e26699",
+        "digest": "0x75e005a5ce80bfe9525acb6a881b421ed7b31d6fe84dafddad00246e5b45068a",
+        "signature": {
+          "v": "28",
+          "r": "0x3a3ac86deea6ee9a73dc8c2bf5927ce0f47e91469a80390546c9dd2e047e7141",
+          "s": "0x4179be8349a7e89a9f3428fd0384214e00bd84c8a3442f413c87a36444376ae8"
+        },
+        "intentId": "0xebd28a8681b66a311187b6e786bf6a8bb93bbf6493ac3d88d7840e3b4243f22f",
+        "requestBody": {
+          "action": "cancel",
+          "signed": {
+            "user": "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+            "intentId": "0xabababababababababababababababababababababababababababababababab",
+            "deadline": "1792592363",
+            "v": "28",
+            "r": "0x3a3ac86deea6ee9a73dc8c2bf5927ce0f47e91469a80390546c9dd2e047e7141",
+            "s": "0x4179be8349a7e89a9f3428fd0384214e00bd84c8a3442f413c87a36444376ae8"
+          }
+        }
+      }
+    }
+  ]
+}

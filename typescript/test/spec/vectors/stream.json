@@ -1,0 +1,128 @@
+{
+  "$comment": "fixtures/sse_open_close.json 의 events 를 순서대로 병합했을 때 각 단계의 기대 상태. 마지막 상태는 reconnectSnapshot 과 일치(검증됨)",
+  "fixture": "fixtures/sse_open_close.json",
+  "compareKeysWithReconnect": [
+    "balance",
+    "queued",
+    "locked",
+    "funds",
+    "openPositions",
+    "operations",
+    "lifetime",
+    "queueRevision",
+    "walletRevision",
+    "sessionKeys",
+    "paper"
+  ],
+  "steps": [
+    {
+      "accountRevision": 1,
+      "openPositionIds": [],
+      "operationIds": [],
+      "balance": "15512658625856729273",
+      "locked": "0",
+      "funds": {
+        "reservedBalance": "0",
+        "reservedQueued": "0",
+        "availableBalance": "15512658625856729273",
+        "availableQueued": "0"
+      },
+      "queueRevision": "16",
+      "emitted": {}
+    },
+    {
+      "accountRevision": 2,
+      "openPositionIds": [],
+      "operationIds": [
+        "0xa38fe45fc58bc22e897da3da1a28d77c12c81a96cd70e7554b9f37c5e8965c04"
+      ],
+      "balance": "15512658625856729273",
+      "locked": "0",
+      "funds": {
+        "reservedBalance": "10000000000000000000",
+        "reservedQueued": "0",
+        "availableBalance": "5512658625856729273",
+        "availableQueued": "0"
+      },
+      "queueRevision": "17",
+      "emitted": {}
+    },
+    {
+      "accountRevision": 3,
+      "openPositionIds": [
+        "1000001"
+      ],
+      "operationIds": [],
+      "balance": "5512658625856729273",
+      "locked": "10000000000000000000",
+      "funds": {
+        "reservedBalance": "0",
+        "reservedQueued": "0",
+        "availableBalance": "5512658625856729273",
+        "availableQueued": "0"
+      },
+      "queueRevision": "18",
+      "emitted": {
+        "intentOutcomes": [
+          [
+            "0xa38fe45fc58bc22e897da3da1a28d77c12c81a96cd70e7554b9f37c5e8965c04",
+            "succeeded"
+          ]
+        ]
+      }
+    },
+    {
+      "accountRevision": 4,
+      "openPositionIds": [
+        "1000001"
+      ],
+      "operationIds": [
+        "0x517b0a19e9b0b0379f4949ba535d5608d107533a11a04221ad304ca8b399b24b"
+      ],
+      "balance": "5512658625856729273",
+      "locked": "10000000000000000000",
+      "funds": {
+        "reservedBalance": "0",
+        "reservedQueued": "0",
+        "availableBalance": "5512658625856729273",
+        "availableQueued": "0"
+      },
+      "queueRevision": "19",
+      "emitted": {}
+    },
+    {
+      "accountRevision": 5,
+      "openPositionIds": [],
+      "operationIds": [],
+      "balance": "15668316641995223080",
+      "locked": "0",
+      "funds": {
+        "reservedBalance": "0",
+        "reservedQueued": "0",
+        "availableBalance": "15668316641995223080",
+        "availableQueued": "0"
+      },
+      "queueRevision": "20",
+      "emitted": {
+        "closedPositions": [
+          [
+            "1000001",
+            0,
+            true,
+            "10000000000000000000",
+            100,
+            false,
+            "155658016138493807",
+            "0"
+          ]
+        ],
+        "intentOutcomes": [
+          [
+            "0x517b0a19e9b0b0379f4949ba535d5608d107533a11a04221ad304ca8b399b24b",
+            "succeeded"
+          ]
+        ]
+      }
+    }
+  ]
+}
